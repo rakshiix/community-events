@@ -1,1 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Local Community Event Portal</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
 
+<!-- welcomeBanner -->
+    <div id="welcomeBanner">
+      <h2>Welcome, <span class="highlight">Community Member</span>!</h2>
+      <p>We're glad to have you back. Don't miss our <span style="color: red; font-weight: bold;">special offer</span> on upcoming premium events!</p>
+    </div>
+
+<!-- Navigation -->
+  <header>
+    <h1>COMMUNITY PORTAL</h1>
+    <nav>
+      <ul>
+        <li><a href="#Home">Home |</a></li>
+        <li><a href="#Events">Events |</a></li>
+        <li><a href="#Contact">Contact |</a></li>
+        <li><a href="help.html" target="_blank">Help</a></li>
+      </ul>
+    </nav>
+  </header>
+
+<!-- Main content -->
+  <main>
+    <center>
+    <section id="home">
+      <h1>Welcome to the Local Community Event Portal</h1>
+      <p>A lightweight, browser-based portal to help residents register for events, check locations, and access basic services.</p>
+    </section>
+    </center>
+
+<!-- Welcome section -->
+    <section id="events">
+      <h2>Upcoming Events</h2>
+      <p>Details about various events will be displayed here.</p>
+      <div class="eventCard">
+        <h3>Community Picnic</h3>
+        <p>Date: July 15, 2025</p>
+        <p>Location: Central Park</p>
+      </div>
+      <div class="eventCard">
+        <h3>Local Art Fair</h3>
+        <p>Date: August 10-12, 2025</p>
+        <p>Location: City Exhibition Hall</p>
+      </div>
+    </section>
+
+<!-- Event Gallery -->
+    <section id="image-gallery" class="gallery-container">
+      <h2>Past Event Gallery</h2>
+      <p>Relive moments from our community's memorable events!</p>
+      <div class="image-gallery">
+        <table>
+          <tr>
+            <td>
+              <img src="community picnic.jpg" alt="Community Picnic 2024 - Group Photo" title="Happy faces at the annual Community Picnic" class="gallery-img">
+              <h2 class="image-caption">Annual Community Picnic</h2>
+            </td>
+            <td>
+              <img src="art fair.webp" alt="Local Art Fair 2024 - Painting" title="A beautiful painting displayed at the Art Fair" class="gallery-img">
+              <h2 class="image-caption">Artwork from the Local Art Fair</h2>
+            </td>
+            <td>
+              <img src="Summer Concert Series.jpeg" alt="Summer Concert Series - Band Playing" title="Live music at the Summer Concert Series" class="gallery-img">
+              <h2 class="image-caption">Summer Concert Series</h2>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <img src="park cleanup.png" alt="Park Clean-up Day - Volunteers" title="Dedicated volunteers cleaning the park" class="gallery-img">
+              <h2 class="image-caption">Park Clean-up Day</h2>
+            </td>
+            <td>
+              <img src="coding workshop.jpg" alt="Coding Workshop - Participants" title="Learning to code at the community workshop" class="gallery-img">
+              <h2 class="image-caption">Community Coding Workshop</h2>
+            </td>
+            <td>
+              <img src="local farmer market.jpg" alt="Farmers Market - Fresh Produce" title="Fresh produce at the weekly Farmers Market" class="gallery-img">
+              <h2 class="image-caption">Local Farmers Market</h2>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </section>
+
+<!-- Geolocation -->
+    <div id="geolocation-div" style="text-align: center; padding-right: 0.3%; padding-left: 1%; margin-top: 2rem;">
+        <h2>Find Nearby Events !</h2>
+        <button onclick="findNearbyEvents()">CLICK HERE</button>
+        <div id="locationResult"></div>
+    </div>
+
+<!-- Registration form -->
+    <section id="registration-form">
+      <h2>Event Registration</h2>
+      <form onsubmit="event.preventDefault(); showConfirmation();">
+        <div class="form-group">
+          <label for="fullName">Name:</label>
+          <input type="text" id="fullName" name="fullName" placeholder="Enter your full name" autofocus required>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" placeholder="your.email@example.com" required>
+        </div>
+
+        <div class="form-group">
+          <label for="eventDate">Preferred Event Date:</label>
+          <input type="date" id="eventDate" name="eventDate" required>
+        </div>
+
+        <div class="form-group">
+          <label for="eventType">Event Type:</label>
+          <select id="eventType" name="eventType" required onchange="saveEventTypePreference()">
+            <option value="">--Select an Event Type--</option>
+            <option value="community_picnic">Community Picnic</option>
+            <option value="art_fair">Local Art Fair</option>
+            <option value="summer_concert">Summer Concert Series</option>
+            <option value="park_cleanup">Park Clean-up Day</option>
+            <option value="coding_workshop">Coding Workshop</option>
+            <option value="farmers_market">Farmers Market</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="message">Message (optional):</label>
+          <textarea id="message" name="message" rows="4" placeholder="Any special requests or comments?"></textarea>
+        </div>
+
+        <div class="form-group">
+          <input type="submit" value="Register for Event">
+        </div>
+
+        <output id="confirmationMessage"></output>
+      </form>
+
+        <div class="form-group">
+            <button onclick="clearPreferences()">Clear Preferences</button>
+        </div>
+    </section>
+
+<!-- Feedback section -->
+    <section id="feedback-section">
+        <h2>Event Feedback</h2>
+        <form>
+            <div class="form-group">
+                <label for="phone">Phone Number:</label>
+                <input type="tel" id="phone" name="phone" placeholder="e.g., 123-456-7890" onblur="validatePhoneNumber()">
+                <output id="phoneValidationMessage"></output>
+            </div>
+
+            <div class="form-group">
+                <label for="eventFee">Select Event for Feedback:</label>
+                <select id="eventFee" name="eventFee" onchange="displayEventFee()">
+                    <option value="">--Select an Event--</option>
+                    <option value="0">Community Picnic (Free)</option>
+                    <option value="0">Local Art Fair (Free)</option>
+                    <option value="20">Summer Concert Series ($20)</option>
+                    <option value="15">Park Clean-up Day ($15)</option>
+                    <option value="10">Coding Workshop ($10)</option>
+                    <option value="5">Farmers Market ($5)</option>
+                </select>
+                <output id="eventFeeDisplay" style="display: none;"></output>
+            </div>
+
+            <div class="form-group">
+                <label for="feedbackTextarea">Your Feedback:</label>
+                <textarea id="feedbackTextarea" name="feedback" rows="6" placeholder="Share your thoughts on the event..." onkeyup="countCharacters()"></textarea>
+                <output id="charCount">0 characters</output>
+            </div>
+
+            <div class="form-group">
+                <input type="button" value="Submit Feedback" onclick="showFeedbackConfirmation()">
+            </div>
+            <output id="feedbackConfirmation"></output>
+        </form>
+    </section>
+
+<!-- Video -->
+    <section id="video-invite-section">
+        <h2>Video Invite to Our Next Big Event!</h2>
+        <p>Get a sneak peek of what's coming up. Make sure your speakers are on!</p>
+        <video id="eventVideo" controls oncanplay="videoCanPlay()" onended="videoEnded()">
+            <source src="community event.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div id="videoStatus"></div>
+    </section>
+
+<!-- Contact -->
+    <section id="contact">
+      <h2>Contact Us</h2>
+      <p>If you have any questions, feel free to reach out!</p>
+      <address>
+        Email: <a href="mailto:commevents@example.com">commevents@gmail.com</a><br />
+        Phone: <a href="tel:+1234567890">+1 (234) 567-890</a>
+      </address>
+    </section>
+
+<!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Local City Council</p>
+  </footer>
+
+<!-- Javascript -->
+    <script>
+      let formUnsaved = false;
+
+    function markFormAsUnsaved() {
+        formUnsaved = true;
+    }
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const registrationForm = document.getElementById('registration-form');
+        const feedbackForm = document.getElementById('feedback-section');
+
+        registrationForm.querySelectorAll('input, select, textarea').forEach(element => {
+            element.addEventListener('input', markFormAsUnsaved);
+        });
+
+        feedbackForm.querySelectorAll('input, select, textarea').forEach(element => {
+            element.addEventListener('input', markFormAsUnsaved);
+        });
+        loadEventTypePreference();
+    });
+
+    function showConfirmation() {
+      const name = document.getElementById('fullName').value;
+      const email = document.getElementById('email').value;
+      const eventType = document.getElementById('eventType').value;
+      const eventDate = document.getElementById('eventDate').value;
+      const message = document.getElementById('message').value;
+      const confirmationOutput = document.getElementById('confirmationMessage');
+
+      let eventTypeName = '';
+      switch(eventType) {
+        case 'community_picnic': eventTypeName = 'Community Picnic'; break;
+        case 'art_fair': eventTypeName = 'Local Art Fair'; break;
+        case 'summer_concert': eventTypeName = 'Summer Concert Series'; break;
+        case 'park_cleanup': eventTypeName = 'Park Clean-up Day'; break;
+        case 'coding_workshop': eventTypeName = 'Coding Workshop'; break;
+        case 'farmers_market': eventTypeName = 'Farmers Market'; break;
+        case 'other': eventTypeName = 'Other Event'; break;
+        default: eventTypeName = 'an unspecified event';
+      }
+
+      confirmationOutput.innerHTML = `
+        <p>Thank you, <span class="highlight">${name}</span>, for registering!</p>
+        <p>A confirmation email has been sent to <span class="highlight">${email}</span>.</p>
+        <p>You have registered for <span class="highlight">${eventTypeName}</span> on <span class="highlight">${eventDate}</span>.</p>
+        ${message ? `<p>Your message: "${message}"</p>` : ''}
+      `;
+      confirmationOutput.style.display = 'block';
+
+      document.getElementById('fullName').value = '';
+      document.getElementById('email').value = '';
+      document.getElementById('eventDate').value = '';
+      document.getElementById('eventType').value = '';
+      document.getElementById('message').value = '';
+      formUnsaved = false;
+    }
+
+    function validatePhoneNumber() {
+        const phoneInput = document.getElementById('phone');
+        const phoneValidationMessage = document.getElementById('phoneValidationMessage');
+        const phonePattern = /^(\d{3}-\d{3}-\d{4}|\d{10})$/;
+
+        if (phoneInput.value === '') {
+            phoneValidationMessage.style.display = 'none';
+            phoneValidationMessage.classList.remove('error');
+            phoneValidationMessage.innerHTML = '';
+            return;
+        }
+
+        if (phonePattern.test(phoneInput.value)) {
+            phoneValidationMessage.innerHTML = 'Phone number is valid.';
+            phoneValidationMessage.style.display = 'block';
+            phoneValidationMessage.classList.remove('error');
+        } else {
+            phoneValidationMessage.innerHTML = 'Invalid phone number format. Use XXX-XXX-XXXX or XXXXXXXXXX.';
+            phoneValidationMessage.style.display = 'block';
+            phoneValidationMessage.classList.add('error');
+        }
+    }
+
+    function displayEventFee() {
+        const eventFeeSelect = document.getElementById('eventFee');
+        const eventFeeDisplay = document.getElementById('eventFeeDisplay');
+        const selectedOption = eventFeeSelect.options[eventFeeSelect.selectedIndex];
+        const fee = selectedOption.value;
+        const eventName = selectedOption.text;
+
+        if (fee === '') {
+            eventFeeDisplay.style.display = 'none';
+            eventFeeDisplay.innerHTML = '';
+        } else if (fee === '0') {
+            eventFeeDisplay.innerHTML = `The selected event (${eventName}) is: <span class="highlight">Free!</span>`;
+            eventFeeDisplay.style.display = 'block';
+        } else {
+            eventFeeDisplay.innerHTML = `The fee for <span class="highlight">${eventName}</span> is: <span class="highlight">$${fee}</span>`;
+            eventFeeDisplay.style.display = 'block';
+        }
+    }
+
+    function enlargeImage(img) {
+        img.classList.toggle('enlarged');
+    }
+
+    function countCharacters() {
+        const feedbackTextarea = document.getElementById('feedbackTextarea');
+        const charCountOutput = document.getElementById('charCount');
+        const currentLength = feedbackTextarea.value.length;
+        charCountOutput.innerHTML = `${currentLength} characters`;
+        charCountOutput.style.display = 'block';
+    }
+
+    function showFeedbackConfirmation() {
+        const feedbackText = document.getElementById('feedbackTextarea').value;
+        const feedbackConfirmationOutput = document.getElementById('feedbackConfirmation');
+        if (feedbackText.trim() === '') {
+            feedbackConfirmationOutput.innerHTML = '<p style="color: red;">Please provide some feedback before submitting.</p>';
+            feedbackConfirmationOutput.style.display = 'block';
+            feedbackConfirmationOutput.style.borderColor = '#f44336';
+            feedbackConfirmationOutput.style.backgroundColor = '#ffe6e6';
+        } else {
+            feedbackConfirmationOutput.innerHTML = '<p>Thank you for your valuable feedback!</p>';
+            feedbackConfirmationOutput.style.display = 'block';
+            feedbackConfirmationOutput.style.borderColor = '#4CAF50';
+            feedbackConfirmationOutput.style.backgroundColor = '#e6ffe6';
+
+            document.getElementById('feedbackTextarea').value = '';
+            document.getElementById('charCount').innerHTML = '0 characters';
+        }
+    }
+
+    function videoCanPlay() {
+        const videoStatus = document.getElementById('videoStatus');
+        videoStatus.innerHTML = 'Video is ready to play! Enjoy the invite.';
+        videoStatus.style.color = 'darkgreen';
+    }
+
+    function videoEnded() {
+        const videoStatus = document.getElementById('videoStatus');
+        videoStatus.innerHTML = 'Video invite has ended. We hope to see you there!';
+        videoStatus.style.color = 'purple';
+        videoWatched = true;
+    }
+
+    window.onbeforeunload = function() {
+        if (formUnsaved) {
+            return "You have unsaved changes in the form. Are you sure you want to leave?";
+        }
+    };
+
+    function saveEventTypePreference() {
+        const eventTypeSelect = document.getElementById('eventType');
+        const selectedValue = eventTypeSelect.value;
+        if (selectedValue) {
+            localStorage.setItem('preferredEventType', selectedValue);
+            console.log('Preferred event type saved:', selectedValue);
+        } else {
+            localStorage.removeItem('preferredEventType');
+            console.log('Preferred event type cleared (no selection)');
+        }
+    }
+
+    function loadEventTypePreference() {
+        const eventTypeSelect = document.getElementById('eventType');
+        const savedPreference = localStorage.getItem('preferredEventType');
+        if (savedPreference) {
+            eventTypeSelect.value = savedPreference;
+            console.log('Preferred event type loaded:', savedPreference);
+        }
+    }
+
+    function clearPreferences() {
+        localStorage.clear();
+        sessionStorage.clear();
+        document.getElementById('eventType').value = '';
+        alert('All preferences (localStorage and sessionStorage) have been cleared!');
+        console.log('All preferences cleared from localStorage and sessionStorage.');
+    }
+
+    function findNearbyEvents() {
+      const resultDiv = document.getElementById("locationResult");
+      resultDiv.textContent = "Detecting your location...";
+
+      if (!navigator.geolocation) {
+        resultDiv.textContent = "Geolocation is not supported by your browser.";
+        return;
+      }
+      navigator.geolocation.getCurrentPosition((position) => {
+        const latitude = position.coords.latitude.toFixed(5);
+        const longitude = position.coords.longitude.toFixed(5);
+        resultDiv.innerHTML = `Your location:<br>Latitude: <span style="color:green;">${latitude}</span><br>Longitude: <span style="color:green;">${longitude}</span>`;
+      },
+      (error) => {
+        switch(error.code) {
+          case error.PERMISSION_DENIED:
+            resultDiv.textContent = "Permission denied. Please allow location access.";
+            break;
+          case error.POSITION_UNAVAILABLE:
+            resultDiv.textContent = "Location information is unavailable.";
+            break;
+          case error.TIMEOUT:
+            resultDiv.textContent = "Location request timed out.";
+            break;
+          default:
+            resultDiv.textContent = "An unknown error occurred.";
+            break;
+    }},
+        {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 0
+        });
+    }
+
+    </script>
+  </main>
+
+</body>
+</html>
